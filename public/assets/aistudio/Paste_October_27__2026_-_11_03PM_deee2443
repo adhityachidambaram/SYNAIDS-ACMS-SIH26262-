@@ -1,0 +1,1740 @@
+MASTER PROMPT — ACMS
+
+AICTE Approval & Compliance Management System
+
+Build a complete, full-stack, production-style SIH prototype in Lovable
+
+Act as a senior full-stack engineer, UI/UX designer, software architect, database engineer, and application security specialist. Build a complete, responsive web application called ACMS — AICTE Approval & Compliance Management System.
+
+Do not create only a landing page or static UI mockup. Build a functional application with connected pages, working forms, database persistence, role-based access, document workflows, dashboards, validations, notifications, reporting, and realistic demo data.
+
+Use the provided ACMS dashboard reference image as the primary visual direction.
+
+---
+
+1. PROJECT OVERVIEW
+
+Project name: ACMS
+
+Full form: AICTE Approval & Compliance Management System
+
+Project context: Smart India Hackathon prototype
+
+Core purpose: Design a unified digital workflow that helps technical institutions manage approval applications, submit supporting evidence, respond to deficiencies, track scrutiny, coordinate Expert Visit Committee activities where applicable, view authorized decisions, and manage post-approval regulatory obligations.
+
+The platform should improve traceability, reduce repetitive administrative work, make application status easier to understand, and help institutions maintain compliance records.
+
+Core innovation
+
+Implement a proposed feature called ROEG — Regulatory Obligation & Evidence Graph.
+
+ROEG connects:
+
+- Regulatory requirements and their versions
+- Applications and institutions
+- Required documents and submitted evidence
+- Evidence versions and extracted information
+- Verification checks and results
+- Deficiencies and corrective actions
+- Responsible users and deadlines
+- EVC records where applicable
+- Authorized decisions
+- Post-approval obligations
+- Audit events and change history
+
+Also implement Dependency-Aware Incremental Re-Scrutiny. When a document or applicable rule changes, the system should identify which checks depend on that change and rerun only those checks when dependencies are known and unchanged inputs are verifiable. If dependencies are uncertain, trigger a full revalidation.
+
+Present this as a proposed workflow innovation to be evaluated, not as a proven industry-first capability.
+
+AI boundaries
+
+AI can assist with document OCR, metadata extraction, document classification, evidence-to-requirement matching, and explanations of detected deficiencies.
+
+AI must never autonomously grant or reject regulatory approval. All consequential scrutiny findings must be reviewable, and final decisions must be recorded by an authorized human officer.
+
+---
+
+2. DESIGN AND VISUAL IDENTITY
+
+Create a modern, polished, professional administrative portal inspired by high-quality enterprise SaaS dashboards and formal Indian public-sector software.
+
+Use the supplied reference image for visual direction, not as a literal screenshot to reproduce.
+
+Design system
+
+- Primary navy: "#0B1F43"
+- Secondary blue: "#1769E0"
+- Accent cyan: "#28B8F2"
+- Success green: "#159B63"
+- Warning amber: "#F2A93B"
+- Error red: "#DC3545"
+- Background: "#F4F7FC"
+- Card background: "#FFFFFF"
+- Primary text: "#152544"
+- Secondary text: "#64748B"
+- Borders: "#E1E8F0"
+
+Layout
+
+Create a persistent, collapsible navy sidebar with a logo area, icons, clear labels, and active-route highlighting.
+
+The top navigation bar should include:
+
+- Global application and institution search
+- Notifications with unread count
+- Current academic year
+- User avatar
+- User name and role
+- Profile menu
+- Settings and logout
+
+The main content area should use a responsive grid, rounded cards, subtle shadows, consistent spacing, readable charts, clean tables, and restrained color coding.
+
+Use Lucide icons consistently.
+
+UI requirements
+
+- Desktop-first dashboard optimized for 1440px screens.
+- Fully responsive tablet and mobile layouts.
+- Functional sidebar and navigation.
+- Breadcrumbs on nested pages.
+- Skeleton loaders and empty states.
+- Toast notifications for success and failure.
+- Confirmation dialogs for consequential actions.
+- Clear loading, validation, and error states.
+- Search, filtering, pagination, and sorting for data tables.
+- Accessible form labels, keyboard navigation, and sufficient contrast.
+- Do not use excessive gradients, oversized empty hero sections, or generic AI-themed decoration.
+
+Use Recharts or another compatible charting library for interactive analytics.
+
+---
+
+3. TECHNOLOGY STACK
+
+Use the following architecture unless a Lovable-supported integration requires a compatible adjustment.
+
+Frontend
+
+- React
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
+- Lucide React
+- React Router
+- React Hook Form
+- Zod
+- Recharts
+
+Backend and persistence
+
+- Supabase Authentication
+- Supabase PostgreSQL
+- Supabase Storage
+- Supabase Row Level Security
+- Supabase Edge Functions where appropriate
+
+Document processing
+
+- A secure backend service for OCR and document processing.
+- A replaceable OCR adapter so the system can work with a real provider or a clearly labelled demo implementation.
+- Optional Python FastAPI OCR service if deployment resources permit.
+
+Deployment
+
+- Lovable-supported hosting and deployment.
+- Supabase for authentication, database, and evidence storage.
+- External integrations through secure server-side functions.
+
+Do not expose secret keys in frontend code. Use environment variables and backend secrets.
+
+Do not claim that an external integration is connected until it has actually been configured and tested.
+
+---
+
+4. USER ROLES AND ACCESS CONTROL
+
+Implement the following roles.
+
+A. Institution Administrator
+
+Can:
+
+- Register and manage their institution profile.
+- Create approval applications.
+- Upload and replace application documents.
+- Save drafts.
+- Submit applications.
+- View scrutiny progress.
+- Respond to deficiency notices.
+- Resubmit corrected evidence.
+- View EVC scheduling and reports relevant to their institution.
+- Track approval decisions.
+- View and submit post-approval compliance evidence.
+- View institutional reports and notifications.
+
+An institution administrator must never access another institution's confidential applications or documents.
+
+B. Scrutiny Officer
+
+Can:
+
+- View applications assigned to them or permitted by their administrative scope.
+- Review submitted documents.
+- View OCR-extracted information and confidence indicators.
+- Run or review rule-based verification checks.
+- Record verification findings.
+- Raise deficiencies with explanations and evidence references.
+- Request corrections.
+- Review resubmitted evidence.
+- View change history.
+- Recommend a next workflow step.
+- Produce scrutiny reports.
+
+Cannot independently perform a final approval action unless their role explicitly includes that permission.
+
+C. EVC Member / Coordinator
+
+Can:
+
+- View assigned EVC cases.
+- View visit schedules and relevant submitted evidence.
+- Record visit details.
+- Complete configurable inspection checklists.
+- Upload findings and supporting evidence.
+- Submit an EVC report.
+- Track report submission status.
+
+EVC functionality must be activated only when the applicable workflow requires it.
+
+D. Authorized Approving Official
+
+Can:
+
+- Review the complete application record.
+- Read scrutiny findings and EVC reports where applicable.
+- Review unresolved deficiencies.
+- Record an authorized decision using configured decision types.
+- Enter reasons and decision notes.
+- Record decision date and references.
+- Trigger notifications.
+- View the complete audit history.
+
+Approval, rejection, return, or other consequential decisions must require confirmation and a recorded reason.
+
+E. System Administrator
+
+Can:
+
+- Manage user accounts and role assignments.
+- Manage institutions and access scopes.
+- Configure workflow settings.
+- Manage versioned regulatory rules.
+- Configure document categories and required evidence.
+- Review audit logs.
+- Configure notification templates.
+- View system health and operational metrics.
+
+Use permission-based access control, not merely hidden frontend buttons.
+
+Enforce all sensitive access rules in the database and backend.
+
+---
+
+5. PUBLIC LANDING PAGE
+
+Create a professional public-facing landing page for ACMS.
+
+Header
+
+- ACMS logo and name
+- Overview
+- Workflow
+- Features
+- Security
+- Sign In
+- Demo Access
+
+Hero section
+
+Headline:
+
+“One Platform. Transparent Approvals. Continuous Compliance.”
+
+Subheading:
+
+“ACMS brings application scrutiny, document verification, deficiency resolution, approval tracking, and post-approval compliance into one traceable digital workflow.”
+
+Primary button: Explore Demo
+
+Secondary button: View Workflow
+
+Add a polished product dashboard preview.
+
+Feature cards
+
+1. Application Lifecycle Management
+2. Document Verification Assistance
+3. Deficiency Tracking and Resolution
+4. EVC Coordination
+5. Regulatory Obligation & Evidence Graph
+6. Post-Approval Compliance
+7. Audit Trails and Reporting
+8. Role-Based Security
+
+Workflow section
+
+Display the process visually:
+
+Institution Submission → Completeness Checks → Officer Scrutiny → Deficiency Resolution → EVC Where Applicable → Authorized Decision → Post-Approval Compliance
+
+Clearly state that final decisions remain with authorized officials.
+
+Security section
+
+Explain role-based access, secure evidence storage, document version history, audit events, and controlled access.
+
+Footer
+
+Include:
+
+- About ACMS
+- Workflow
+- Security
+- Contact / Demo Support
+- Privacy
+- Terms
+- Prototype disclaimer
+
+Add this disclaimer:
+
+“ACMS is a proposed demonstration platform developed for academic and hackathon evaluation. It is not an official AICTE portal and does not represent an authorized integration with AICTE systems.”
+
+Do not invent official support email addresses, helpline numbers, or government endorsements.
+
+---
+
+6. AUTHENTICATION AND ONBOARDING
+
+Implement functional authentication using Supabase Auth.
+
+Pages:
+
+- Sign In
+- Sign Up, if enabled for the prototype
+- Forgot Password
+- Reset Password
+- Access Denied
+- Profile Setup
+
+Registration fields
+
+- Full name
+- Email
+- Password
+- Organization / institution name where applicable
+- Requested role
+- Contact information, if needed
+
+Do not allow public users to self-assign privileged officer or administrator roles.
+
+Privileged roles must be assigned through a secure administrative process.
+
+Authentication behavior
+
+- Validate fields.
+- Show helpful error messages.
+- Support logout.
+- Protect authenticated routes.
+- Restore sessions on refresh.
+- Redirect users to their role-appropriate dashboard.
+- Enforce role permissions on every protected backend operation.
+- Prevent unauthorized users from changing their role through browser tools or direct API requests.
+
+For demonstration environments, provide seeded demo accounts only when securely configured.
+
+Do not hardcode production passwords or privileged credentials in the repository.
+
+---
+
+7. ROLE-SPECIFIC DASHBOARDS
+
+Build a separate dashboard experience for each role.
+
+A. Institution Dashboard
+
+Metric cards:
+
+- Total Applications
+- Draft Applications
+- Under Scrutiny
+- Deficiencies to Resolve
+- Approved Applications
+- Pending Compliance Obligations
+
+Charts:
+
+- Applications by status
+- Application activity over time
+- Compliance completion percentage
+- Deficiency resolution trend
+
+Tables and panels:
+
+- Recent Applications
+- Pending Actions
+- Upcoming Deadlines
+- Recent Deficiency Notices
+- Compliance Reminders
+- Recent Notifications
+
+Each card and row must navigate to the relevant filtered page.
+
+B. Scrutiny Officer Dashboard
+
+Metrics:
+
+- Assigned Applications
+- Awaiting Review
+- Deficiencies Pending
+- Resubmissions Received
+- Reviews Completed
+- Overdue Reviews
+
+Include:
+
+- Prioritized scrutiny queue
+- Deadline indicators
+- Application completeness
+- Document verification status
+- OCR review queue
+- Recent scrutiny activity
+
+Filters:
+
+- Academic year
+- Application type
+- Assigned officer
+- Status
+- Submission date
+- Priority
+
+C. EVC Dashboard
+
+Metrics:
+
+- Assigned Cases
+- Visits Scheduled
+- Reports Pending
+- Reports Submitted
+
+Include a calendar, visit schedule, inspection checklist access, assigned case list, and report submission status.
+
+D. Authorized Official Dashboard
+
+Metrics:
+
+- Decisions Awaiting Review
+- Cases Ready for Decision
+- Applications Returned
+- Decisions Recorded
+
+Include a decision queue, scrutiny summary, EVC findings where applicable, unresolved deficiency indicators, and complete audit history.
+
+E. System Administrator Dashboard
+
+Metrics:
+
+- Registered Institutions
+- Active Users
+- Applications in System
+- Pending Workflow Tasks
+- Failed Processing Jobs
+- Recent Security Events
+
+Include user management, role assignments, workflow configuration, regulatory rule versions, storage and processing status, and audit-log search.
+
+All statistics must be calculated from stored records. Clearly label demo data.
+
+---
+
+8. APPLICATION MANAGEMENT MODULE
+
+Create an Applications page with:
+
+- Search
+- Advanced filters
+- Sortable columns
+- Pagination
+- Status badges
+- Application detail navigation
+- Create Application button
+- Export permitted records
+
+Suggested table columns:
+
+- Application ID
+- Institution
+- Application Type
+- Academic Year
+- Submission Date
+- Current Stage
+- Assigned Officer
+- Pending Actions
+- Last Updated
+
+Application statuses
+
+Use a controlled state model, including:
+
+- Draft
+- Submitted
+- Completeness Check
+- Under Scrutiny
+- Deficiency Raised
+- Resubmitted
+- EVC Required
+- EVC Scheduled
+- EVC Report Submitted
+- Ready for Decision
+- Approved
+- Rejected
+- Returned for Correction
+- Withdrawn
+
+Not every status applies to every application. Define allowed transitions by workflow and permissions.
+
+Do not allow arbitrary direct status changes from the UI.
+
+---
+
+9. MULTI-STEP APPLICATION FORM
+
+Create a polished stepper with save-draft and next/back functionality.
+
+Step 1: Basic Details
+
+Fields:
+
+- Application Type
+- Academic Year
+- Institution Name
+- Institution Type
+- State
+- District
+- Address
+- Official Contact Name
+- Official Email
+- Contact Number
+- Existing institution reference, if applicable
+
+Step 2: Institution Details
+
+Fields should be configurable based on the application type.
+
+Examples:
+
+- Institution profile
+- Affiliation or recognition details
+- Institution category
+- Campus information
+- Relevant identification references
+
+Do not invent mandatory legal requirements. Use clearly labelled configurable fields until verified against the applicable official handbook.
+
+Step 3: Programs and Intake
+
+Allow users to add multiple program records.
+
+Fields:
+
+- Program Name
+- Qualification / Level
+- Discipline
+- Proposed Intake
+- Existing Intake, if applicable
+- Applicable academic year
+- Supporting evidence
+
+Use an editable table or repeatable form sections.
+
+Step 4: Document Upload
+
+Display a requirement checklist driven by the selected application type and active rule version.
+
+For each requirement show:
+
+- Requirement name
+- Required or optional
+- Accepted formats
+- Upload status
+- Version
+- Verification status
+- Last updated
+- Action
+
+Step 5: Review and Submit
+
+Display:
+
+- Application summary
+- Program summary
+- Required document checklist
+- Missing field warnings
+- Declaration checkbox
+- Save Draft
+- Submit Application
+
+Submission must fail if required fields or required evidence are missing.
+
+On submission:
+
+1. Validate data on the server.
+2. Create a submission record.
+3. Record the relevant rule version.
+4. Record the evidence versions used.
+5. Create an audit event.
+6. Initialize the configured workflow.
+7. Notify the appropriate workflow participants.
+
+Show a clear confirmation page with the application reference.
+
+---
+
+10. DOCUMENT MANAGEMENT AND OCR
+
+Build a full document management interface.
+
+Features
+
+- Drag-and-drop upload
+- File browser
+- Upload progress
+- File type and size validation
+- Document categories
+- Requirement mapping
+- Document preview where supported
+- Document metadata
+- Version history
+- Replacement upload
+- Download permission checks
+- Verification history
+- Processing status
+
+Support PDF, JPG, JPEG, and PNG initially, with configurable file-size limits.
+
+Validate file content, not just its extension or client-provided MIME type. Apply server-side upload validation and secure storage controls.
+
+Store evidence in private storage. Do not expose permanent public URLs for confidential documents. Use authenticated access or short-lived signed URLs where appropriate.
+
+OCR processing workflow
+
+1. Institution uploads a document.
+2. Backend validates the file.
+3. Document metadata and storage reference are recorded.
+4. OCR processing is queued.
+5. Extracted text and metadata are saved.
+6. Extracted fields are shown for human verification.
+7. System suggests relevant regulatory requirements.
+8. User or officer accepts, corrects, or rejects suggestions.
+9. Verification status is recorded.
+
+Display the following states:
+
+- Uploaded
+- Queued
+- Processing
+- Extracted
+- Review Required
+- Verified
+- Failed
+- Superseded
+
+Show extraction confidence where the OCR provider supplies a meaningful confidence score.
+
+Never fabricate confidence values.
+
+If OCR integration is not configured, use an explicit demo mode with sample extraction results. Do not pretend that actual OCR occurred.
+
+Evidence details
+
+For every uploaded item, retain:
+
+- Evidence ID
+- Institution ID
+- Application ID
+- Requirement ID
+- Storage path
+- Original filename
+- File type
+- Uploading user
+- Upload timestamp
+- Version number
+- Content hash where feasible
+- OCR processing status
+- Verification status
+- Previous version reference
+
+Never overwrite an old evidence record in a way that destroys its audit history.
+
+---
+
+11. SCRUTINY AND VERIFICATION WORKSPACE
+
+This is one of the most important pages in ACMS.
+
+Build a three-column desktop layout:
+
+Left column — Application overview
+
+- Institution profile
+- Application summary
+- Current stage
+- Timeline
+- Required documents
+- Outstanding deficiencies
+
+Center column — Evidence review
+
+- Selected document
+- Preview or extracted text
+- OCR fields
+- Matched requirement
+- Evidence version
+- Verification history
+
+Right column — Officer actions
+
+- Mark Verified
+- Mark Needs Clarification
+- Raise Deficiency
+- Add Internal Note
+- Request Resubmission
+- Save Review
+
+Include tabs:
+
+- Overview
+- Documents
+- Requirement Mapping
+- Deficiencies
+- EVC Report
+- Decision History
+- Audit Trail
+
+Verification rules
+
+Implement configurable checks for:
+
+- Required document present
+- Supported file type
+- Required fields present
+- Document assigned to a relevant requirement
+- Document version current
+- Duplicate document detection where appropriate
+- Missing or conflicting metadata flags
+
+These checks are administrative validation aids, not proof that a document is authentic or that an institution satisfies every regulatory requirement.
+
+Every result must show:
+
+- Check name
+- Result
+- Rule version
+- Evidence version
+- Reason
+- Timestamp
+- Reviewer or processing source
+
+---
+
+12. DEFICIENCY MANAGEMENT
+
+Create a dedicated Deficiencies page.
+
+A deficiency record must contain:
+
+- Deficiency ID
+- Application ID
+- Requirement
+- Description
+- Evidence reference
+- Severity or priority
+- Raised by
+- Date raised
+- Due date
+- Status
+- Institution response
+- Resolution notes
+- Resolution date
+
+Statuses:
+
+- Open
+- Response Submitted
+- Under Review
+- Resolved
+- Reopened
+- Closed
+
+Institution experience
+
+Institutions should be able to:
+
+- View deficiency details.
+- Understand what must be corrected.
+- Upload replacement evidence.
+- Enter a response.
+- Submit for review.
+- Track resolution.
+
+Officer experience
+
+Officers should be able to:
+
+- Review the response.
+- Verify new evidence.
+- Resolve the deficiency.
+- Reopen it with a reason.
+- Request additional clarification.
+
+Record each transition in the audit history.
+
+Do not delete deficiencies when resolved.
+
+---
+
+13. REGULATORY OBLIGATION & EVIDENCE GRAPH (ROEG)
+
+Build a dedicated ROEG page that visually explains the relationship between regulatory requirements and their supporting evidence.
+
+Create an interactive graph or dependency visualization with nodes for:
+
+- Regulatory Rule
+- Rule Version
+- Requirement
+- Application
+- Evidence
+- Verification Check
+- Deficiency
+- Responsible User
+- Deadline
+- Decision
+- Compliance Obligation
+- Audit Event
+
+Use arrows to indicate relationships.
+
+Clicking a node should open its detail panel with relevant metadata and links.
+
+ROEG features
+
+- Search nodes.
+- Filter by institution and application.
+- Filter by rule version.
+- Highlight unresolved deficiencies.
+- Highlight missing evidence.
+- Highlight overdue obligations.
+- Display evidence version history.
+- Show requirement-to-evidence mapping.
+- Show rule dependencies.
+- Navigate to source records.
+
+If a complete graph library is impractical, use a well-designed interactive dependency tree or relationship map.
+
+The visualization must be based on real stored records, not a static illustration.
+
+---
+
+14. DEPENDENCY-AWARE INCREMENTAL RE-SCRUTINY
+
+Implement a demonstrable prototype of this proposed feature.
+
+Goal
+
+Reduce unnecessary repeated checks when evidence or applicable regulatory rules change.
+
+Data model
+
+Every verification check should store:
+
+- Check ID
+- Application ID
+- Rule ID and version
+- Input evidence IDs and versions
+- Relevant configuration version
+- Dependency references
+- Previous result
+- Execution timestamp
+- Execution status
+- Result explanation
+
+Processing algorithm
+
+When evidence changes:
+
+1. Identify the changed evidence ID and version.
+2. Find checks that depend on the changed evidence.
+3. Expand dependencies to identify downstream affected checks.
+4. Rerun affected checks only if the dependency map is complete and all relevant inputs can be validated.
+5. Preserve unaffected prior results only when all their evidence versions, rule versions, dependency references, and relevant configuration remain unchanged.
+6. If any dependency is missing, uncertain, or inconsistent, fall back to full revalidation.
+7. Store the new results.
+8. Record which checks were rerun and why.
+9. Show the change in the scrutiny history.
+
+When a rule version changes, identify all checks that depend on that rule or affected requirements.
+
+User interface
+
+Add a button:
+
+“Analyze Impact of Changes”
+
+The results panel should display:
+
+- Changed evidence or rule
+- Affected requirements
+- Affected checks
+- Unaffected checks
+- Checks requiring full revalidation
+- Execution status
+- Previous and current results
+
+For demo purposes, create deterministic test cases showing both incremental and full revalidation paths.
+
+Do not claim a measured efficiency improvement until the feature has been benchmarked.
+
+---
+
+15. EVC MANAGEMENT
+
+Create an EVC Management module.
+
+EVC list
+
+Columns:
+
+- EVC Reference
+- Application
+- Institution
+- Scheduled Date
+- Assigned Members
+- Visit Status
+- Report Status
+- Actions
+
+Scheduling form
+
+Include:
+
+- Application reference
+- Proposed date and time
+- Visit mode or location
+- Assigned members
+- Coordinator
+- Instructions
+- Notes
+
+Validate scheduling and prevent conflicting records where possible.
+
+Visit workspace
+
+Include:
+
+- Application summary
+- Relevant evidence
+- Inspection checklist
+- Observation fields
+- Supporting uploads
+- Member notes
+- Findings
+- Recommendations
+- Report submission
+
+Use configurable checklist templates.
+
+Only authorized users should be able to submit or amend official EVC records. Preserve prior versions and amendment history.
+
+---
+
+16. AUTHORIZED DECISION MANAGEMENT
+
+Create a decision workspace for authorized officials.
+
+Display:
+
+- Application summary
+- Institution and program details
+- Scrutiny report
+- Verified evidence
+- Outstanding deficiencies
+- EVC report, where applicable
+- Rule versions used
+- Previous actions
+- Audit history
+
+Decision options should be configurable, for example:
+
+- Approved
+- Rejected
+- Returned for Correction
+- Deferred / Further Review
+
+Only show decisions permitted by the configured workflow.
+
+Before recording a decision, require:
+
+- Decision type
+- Decision reason
+- Authorized user identity
+- Decision date
+- Supporting notes or references where applicable
+- Confirmation
+
+On decision submission:
+
+- Verify authorization on the server.
+- Validate workflow prerequisites.
+- Save the decision.
+- Record the rule and evidence context.
+- Write an immutable-style audit event.
+- Update the application workflow.
+- Trigger relevant notifications.
+- Show a decision summary.
+
+The system must not generate a fake official AICTE approval certificate. Any generated report must be marked as a prototype or demonstration record.
+
+---
+
+17. POST-APPROVAL COMPLIANCE
+
+Create a dedicated Compliance module.
+
+The purpose is to help institutions track obligations applicable after an approval decision.
+
+Compliance dashboard
+
+Metric cards:
+
+- Total Obligations
+- Completed
+- Pending
+- Due Soon
+- Overdue
+- Awaiting Review
+
+Compliance register
+
+Columns:
+
+- Obligation ID
+- Requirement
+- Source Rule and Version
+- Assigned Owner
+- Due Date
+- Evidence Status
+- Review Status
+- Last Updated
+
+Obligation lifecycle
+
+1. Create or activate an applicable obligation.
+2. Assign an owner.
+3. Set a deadline according to configured policy.
+4. Upload supporting evidence.
+5. Validate required fields and evidence.
+6. Submit for review.
+7. Reviewer verifies or requests correction.
+8. Mark completed when authorized conditions are satisfied.
+9. Preserve the complete history.
+
+Reminders
+
+Support in-app reminders for:
+
+- Upcoming deadlines
+- Overdue obligations
+- Returned evidence
+- Pending reviewer actions
+
+Use configurable thresholds. Do not invent official deadline periods.
+
+Do not send external emails unless an email provider is configured and tested.
+
+---
+
+18. REGULATORY RULE MANAGEMENT
+
+Create a Regulatory Rules module restricted to authorized administrators.
+
+Rule fields
+
+- Rule ID
+- Rule title
+- Description
+- Source reference
+- Effective date
+- Expiry date, if applicable
+- Version
+- Applicable application types
+- Requirements
+- Required evidence
+- Validation checks
+- Dependencies
+- Status
+- Created by
+- Reviewed by
+- Published timestamp
+
+Versioning behavior
+
+- Published rule versions must be immutable.
+- Amendments create a new version.
+- Existing applications retain the rule version recorded for their relevant workflow stage unless a configured migration or updated policy explicitly requires otherwise.
+- Display differences between versions.
+- Record who created, reviewed, and published each version.
+- Prevent silent modifications to rules already used in recorded decisions.
+
+Use clearly labelled sample rules in the demo dataset. Do not invent legal provisions or present demo rules as official requirements.
+
+Where possible, provide a source-reference field linking to the applicable official document.
+
+---
+
+19. REPORTS AND ANALYTICS
+
+Build a Reports & Analytics module with filters for academic year, institution, application type, stage, and date range.
+
+Reports
+
+- Application Status Summary
+- Application Processing Timeline
+- Deficiency Resolution Report
+- Document Verification Summary
+- EVC Schedule and Report Summary
+- Authorized Decision Register
+- Post-Approval Compliance Status
+- Overdue Obligation Report
+- Audit Activity Report
+- Incremental Re-Scrutiny Evaluation Report
+
+Charts
+
+- Applications by status
+- Monthly submission trends
+- Deficiencies by category
+- Compliance completion over time
+- Processing time distribution
+- Verification outcomes
+- Incremental versus full revalidation checks
+
+Export
+
+Support CSV export for records the current user is authorized to access.
+
+If PDF export is implemented, generate a professional report with date, filters, and a prototype disclaimer.
+
+Research evaluation
+
+For incremental re-scrutiny, calculate metrics from actual recorded test runs:
+
+- Total checks in full revalidation
+- Checks rerun incrementally
+- Percentage of checks avoided
+- Time taken by each approach
+- Affected-check identification accuracy
+- False-positive and false-negative counts
+- Agreement with full recomputation
+
+Use a clear evaluation dataset and compare incremental outputs against full recomputation. Never display fabricated research results as real measurements.
+
+---
+
+20. NOTIFICATIONS AND TASK CENTER
+
+Create a centralized notifications module.
+
+Notification types:
+
+- Application submitted
+- Application assigned
+- Scrutiny started
+- Deficiency raised
+- Institution response submitted
+- Additional evidence requested
+- EVC scheduled
+- EVC report submitted
+- Decision recorded
+- Compliance deadline approaching
+- Compliance evidence returned
+- Compliance obligation overdue
+
+Features:
+
+- Unread count
+- Mark as read
+- Mark all as read
+- Filter by type
+- Link to related record
+- Timestamp
+- In-app notification history
+
+Use database-backed notifications.
+
+Ensure notifications do not expose confidential details to unauthorized users.
+
+---
+
+21. INSTITUTION DIRECTORY
+
+Create an Institutions module.
+
+Institution administrators may access and edit their own institution profile.
+
+Authorized officers may access records within their assigned administrative scope.
+
+System administrators may manage the directory.
+
+Institution profile
+
+- Institution name
+- Institution category
+- Location
+- Contact details
+- Available program records
+- Application history
+- Current application statuses
+- Applicable compliance obligations
+- Uploaded evidence references
+- Audit timeline
+
+Do not display confidential data to the public without an explicit authorization and publication policy.
+
+---
+
+22. USER MANAGEMENT
+
+Create a System Administration → Users page.
+
+Features:
+
+- Search users
+- Filter by role
+- View account status
+- Assign roles
+- Assign institutional scope
+- Enable or disable accounts
+- View last activity where available
+- Review relevant audit events
+
+Require confirmation for role changes and account deactivation.
+
+Enforce privileged operations on the server and database.
+
+Never allow users to promote themselves to an officer or administrator through direct requests.
+
+---
+
+23. DATABASE SCHEMA
+
+Create a relational database with appropriate foreign keys, indexes, constraints, timestamps, and access policies.
+
+Use UUID primary keys where appropriate.
+
+Create the following tables, adapting naming conventions consistently.
+
+Identity and access
+
+- "profiles"
+- "user_roles"
+- "institutions"
+- "institution_memberships"
+
+Applications
+
+- "applications"
+- "application_programs"
+- "application_submissions"
+- "application_assignments"
+- "application_status_history"
+
+Documents and evidence
+
+- "document_requirements"
+- "evidence_documents"
+- "evidence_versions"
+- "document_processing_jobs"
+- "document_extractions"
+- "evidence_requirement_mappings"
+
+Rules and verification
+
+- "regulatory_rules"
+- "regulatory_rule_versions"
+- "rule_requirements"
+- "verification_checks"
+- "verification_check_dependencies"
+- "verification_runs"
+- "verification_results"
+
+Deficiencies
+
+- "deficiencies"
+- "deficiency_responses"
+- "deficiency_status_history"
+
+EVC
+
+- "evc_assignments"
+- "evc_visits"
+- "evc_members"
+- "evc_checklist_templates"
+- "evc_checklist_responses"
+- "evc_reports"
+
+Decisions
+
+- "application_decisions"
+- "decision_supporting_references"
+
+Compliance
+
+- "compliance_obligations"
+- "compliance_assignments"
+- "compliance_evidence"
+- "compliance_reviews"
+- "compliance_status_history"
+
+ROEG
+
+- "roeg_nodes"
+- "roeg_edges"
+
+Alternatively, generate graph relationships from the underlying relational records if that is safer and more maintainable.
+
+Audit and operations
+
+- "audit_logs"
+- "notifications"
+- "notification_preferences"
+- "workflow_transitions"
+- "processing_jobs"
+- "system_settings"
+
+Use normalized relations where appropriate. Avoid storing the same source of truth in several unrelated tables.
+
+Store rule and evidence version references on verification results so historical decisions can be explained.
+
+Use database transactions for operations that must succeed or fail together.
+
+---
+
+24. ROW LEVEL SECURITY AND DATA PROTECTION
+
+Implement Supabase Row Level Security for all sensitive tables.
+
+Institution isolation
+
+Institution users may only access records linked to institutions for which they have an authorized membership.
+
+Officer isolation
+
+Officers may access only records permitted by their assigned scope and permissions.
+
+EVC isolation
+
+EVC users may access only the assigned cases and necessary related records.
+
+Approving official isolation
+
+Authorized officials may access cases within their configured authority and scope.
+
+Administrator access
+
+System administrators receive only the permissions required for system administration. All privileged operations must be audited.
+
+Storage access
+
+Evidence files must be private.
+
+Implement access policies for:
+
+- Uploading evidence
+- Reading evidence
+- Downloading evidence
+- Replacing evidence
+- Accessing superseded versions
+
+Validate permissions in backend functions and storage policies, not only in frontend code.
+
+Security requirements
+
+- Never put service-role keys in frontend code.
+- Validate inputs server-side.
+- Restrict file size and permitted formats.
+- Use safe filenames and storage keys.
+- Protect against unauthorized direct-object access.
+- Avoid logging passwords, secrets, and unnecessary sensitive document contents.
+- Use secure session management.
+- Rate-limit sensitive operations where practical.
+- Preserve audit history.
+- Apply least privilege.
+- Use private storage and short-lived signed URLs where appropriate.
+
+Do not claim that the prototype is certified or legally compliant without an actual assessment.
+
+---
+
+25. AUDIT TRAIL
+
+Create an Audit Trail page for authorized users.
+
+Each event should record, where applicable:
+
+- Event ID
+- Timestamp
+- Actor
+- Role
+- Action
+- Entity type
+- Entity ID
+- Previous state reference
+- New state reference
+- Reason
+- Related application
+- Related rule version
+- Related evidence version
+- Request or correlation ID
+
+Track significant events such as:
+
+- Application submission
+- Evidence upload or replacement
+- Verification result
+- Deficiency creation or resolution
+- EVC report submission
+- Decision recording
+- Rule publication
+- Role assignment
+- Compliance status change
+- Access-policy-sensitive administrative actions
+
+Do not permit ordinary users to edit or delete audit records.
+
+Design audit events as append-only application records, and use stronger tamper-resistant storage controls if required by a real deployment.
+
+---
+
+26. DEMO DATA AND DEMONSTRATION EXPERIENCE
+
+Seed the application with clearly labelled fictional data so judges can explore all workflows without waiting for real integrations.
+
+Create fictional institutions such as:
+
+- ABC Institute of Technology
+- XYZ Engineering College
+- LMN Polytechnic
+- PQR University
+
+Create realistic sample records with varied statuses:
+
+- Draft
+- Under Scrutiny
+- Deficiency Raised
+- Resubmitted
+- EVC Scheduled
+- Ready for Decision
+- Approved
+- Compliance Due Soon
+- Compliance Overdue
+
+Use plausible demo dates and consistent relationships across records.
+
+Clearly display a DEMO DATA label.
+
+Never use invented statistics as real AICTE statistics.
+
+Demonstration journey
+
+Create an easy-to-follow workflow for judges:
+
+1. Sign in as an institution administrator.
+2. Create an application.
+3. Upload sample evidence.
+4. View OCR extraction or labelled demo extraction.
+5. Submit the application.
+6. Switch to the scrutiny officer role.
+7. Review evidence and raise a deficiency.
+8. Return to the institution account.
+9. Upload corrected evidence and resubmit.
+10. Review the updated checks and incremental re-scrutiny analysis.
+11. Switch to the EVC role and submit a sample report if required.
+12. Switch to an authorized official.
+13. Record a demo decision.
+14. Switch back to the institution.
+15. View the decision and applicable compliance obligations.
+16. Submit compliance evidence.
+17. Open the audit trail and ROEG visualization.
+18. Open the research evaluation report.
+
+Use actual database persistence and permitted role switching in the demo environment. Clearly distinguish simulated integrations from real services.
+
+---
+
+27. RECOMMENDED APPLICATION ROUTES
+
+Implement a coherent route structure such as:
+
+Public:
+
+- "/"
+- "/workflow"
+- "/security"
+- "/login"
+- "/register"
+- "/forgot-password"
+
+Shared authenticated pages:
+
+- "/app/dashboard"
+- "/app/notifications"
+- "/app/profile"
+
+Institution:
+
+- "/app/my-applications"
+- "/app/applications/new"
+- "/app/applications/:id"
+- "/app/documents"
+- "/app/deficiencies"
+- "/app/compliance"
+- "/app/institution-profile"
+
+Officer:
+
+- "/app/scrutiny"
+- "/app/scrutiny/:id"
+- "/app/verification"
+- "/app/evc"
+- "/app/decisions"
+
+Administration:
+
+- "/app/institutions"
+- "/app/regulatory-rules"
+- "/app/roeg"
+- "/app/reports"
+- "/app/audit-logs"
+- "/app/users"
+- "/app/settings"
+
+You may adapt the paths, but all navigation must resolve to real pages.
+
+---
+
+28. COMPONENTS TO BUILD
+
+Build reusable components for:
+
+- Application shell
+- Sidebar
+- Header
+- Breadcrumbs
+- Stat cards
+- Charts
+- Data tables
+- Search and filter bars
+- Status badges
+- Application stepper
+- Document uploader
+- Document preview
+- OCR extraction panel
+- Verification result panel
+- Deficiency form
+- Activity timeline
+- Notification center
+- EVC calendar
+- Decision confirmation dialog
+- Compliance obligation card
+- Rule version comparison
+- ROEG graph
+- Audit log viewer
+- Empty state
+- Loading skeleton
+- Error boundary
+- Confirmation dialog
+- Toast notifications
+
+Use shared design tokens and reusable layouts to keep the interface consistent.
+
+---
+
+29. FUNCTIONAL ACCEPTANCE CRITERIA
+
+Do not consider the build complete until the following are implemented and tested.
+
+Authentication
+
+- Users can sign in and sign out.
+- Routes are protected.
+- Roles are enforced.
+- Privileged roles cannot be self-assigned.
+
+Applications
+
+- An institution can create and save a draft.
+- A draft can be edited after saving.
+- Required fields are validated.
+- A valid application can be submitted.
+- Status history is recorded.
+
+Documents
+
+- A valid file can be uploaded to private storage.
+- Invalid files are rejected.
+- Evidence metadata is persisted.
+- New versions do not erase previous history.
+- Unauthorized users cannot download another institution's documents.
+
+Scrutiny
+
+- Officers can review assigned applications.
+- Verification results are persisted.
+- Deficiencies can be raised.
+- Institutions can respond and resubmit.
+- Resubmission history is preserved.
+
+Incremental re-scrutiny
+
+- Changing evidence identifies dependent checks.
+- Unaffected checks are reused only when all required version and dependency conditions remain valid.
+- Uncertain dependencies trigger full revalidation.
+- The result and reason are recorded.
+- Incremental results agree with full recomputation on the defined test cases.
+
+EVC and decisions
+
+- EVC records can be created and submitted by permitted users.
+- Authorized officials can record decisions.
+- Unauthorized users cannot record decisions.
+- Decision reasons and audit events persist.
+
+Compliance
+
+- Applicable obligations can be assigned.
+- Evidence can be submitted.
+- Review status can change through permitted transitions.
+- Overdue status is calculated from configured deadlines.
+
+Reports and audit
+
+- Dashboard metrics are derived from stored data.
+- Filters work.
+- Authorized CSV exports work.
+- Audit events are visible to permitted users.
+
+Quality
+
+- No broken routes.
+- No dead buttons.
+- No fake success messages.
+- No hardcoded secrets.
+- No public exposure of confidential files.
+- No reliance on frontend-only authorization.
+- No misleading claims that demo OCR or official integrations are live.
+
+---
+
+30. IMPLEMENTATION STRATEGY
+
+Build the website in stages while keeping the application usable at every stage.
+
+Stage 1 — Foundation
+
+- Design system
+- Landing page
+- Sidebar and header
+- Authentication
+- Database schema
+- Role-based navigation
+
+Stage 2 — Core workflow
+
+- Institution dashboard
+- Application form
+- Application list and detail pages
+- Document upload
+- Deficiency handling
+- Officer scrutiny
+
+Stage 3 — Advanced workflow
+
+- EVC management
+- Authorized decisions
+- Compliance module
+- Regulatory rule versioning
+- Audit trail
+
+Stage 4 — Innovation
+
+- ROEG visualization
+- Dependency-aware incremental re-scrutiny
+- Change impact analysis
+- Evaluation reports
+
+Stage 5 — Finalization
+
+- Notifications
+- Search and filters
+- CSV exports
+- Responsive optimization
+- Access-control testing
+- Error handling
+- Seeded demo data
+- Deployment configuration
+
+Do not stop after Stage 1 or merely generate a set of attractive screens. Continue building the connected workflows and persistence layer.
+
+If an external integration requires credentials, build the adapter, configuration screen, validation, and a clearly labelled demo fallback instead of inventing a connection.
+
+---
+
+31. FINAL VISUAL QUALITY REQUIREMENTS
+
+The finished website should feel like a polished enterprise administration platform suitable for a national-level hackathon demonstration.
+
+Use:
+
+- A consistent navy sidebar
+- Clean white content cards
+- Blue, green, amber, and red status indicators
+- Realistic charts and tables
+- Meaningful empty states
+- Clear page hierarchy
+- Compact, readable typography
+- Smooth but restrained transitions
+- Consistent spacing and icons
+- Professional institutional language
+- Strong desktop and mobile layouts
+
+The dashboard should resemble the provided ACMS UI mockup, including metric cards, application charts, recent applications, upcoming tasks, announcements, and a clear institutional header.
+
+Do not copy unrelated EcoWipe content from any reference slide.
+
+Do not invent official AICTE endorsements, government partnerships, live API access, official certificates, or regulatory claims.
+
+---
+
+32. START BUILDING
+
+Begin by creating the shared design system, public landing page, authenticated application shell, and database foundation.
+
+Then implement the role-specific dashboards and the complete application-to-compliance workflow.
+
+Use real persisted records wherever the required backend is configured. Clearly label demo-only data and simulated integrations.
+
+Prioritize functional completeness, secure access control, reliable workflow transitions, evidence traceability, and a convincing live demonstration over decorative complexity.
+
+Final objective: Deliver a working ACMS prototype that judges can navigate end-to-end, understand without technical assistance, and evaluate through a realistic application, scrutiny, deficiency-resolution, decision, and compliance lifecycle.

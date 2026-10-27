@@ -1,0 +1,7 @@
+{
+  "name": "ACMS — AICTE Approval & Compliance Management System",
+  "description": "Unified digital workflow platform for AICTE technical institution approvals, evidence verification, ROEG graph, deficiency tracking, EVC coordination, and post-approval compliance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
